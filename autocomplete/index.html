@@ -1,0 +1,65 @@
+<html>
+	<head>
+		<title>Membuat Script Auto Complete dengan PHP AJAX by Erick Alfons Lisangan</title>
+<script language='JavaScript'>
+
+var ajaxRequest;
+function getAjax() //fungsi untuk mengecek AJAX pada browser
+{
+	try
+	{
+		ajaxRequest = new XMLHttpRequest();
+	}
+	catch (e)
+	{
+		try
+		{
+			ajaxRequest = new ActiveXObject("Msxml2.XMLHTTP");
+		}
+		catch (e) 
+		{
+			try
+			{
+				ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			catch (e)
+			{
+				alert("Your browser broke!");
+				return false;
+			}
+		}
+	}
+}
+
+function autoComplete() //fungsi menangkap input search dan menampilkan hasil search
+{
+	getAjax();
+	input = document.getElementById('inputan').value;
+
+	if (input == "")
+	{
+		document.getElementById("hasil").innerHTML = "";
+	}
+	else
+	{
+		ajaxRequest.open("GET","search.php?input="+input);
+		ajaxRequest.onreadystatechange = function()
+		{
+			document.getElementById("hasil").innerHTML = ajaxRequest.responseText;
+		}
+		ajaxRequest.send(null);
+	}
+}
+
+function autoInsert(nama) //fungsi mengisi input text dengan hasil pencarian yang dipilih
+{
+	document.getElementById("inputan").value = nama;
+	document.getElementById("hasil").innerHTML = "";
+}
+</script>
+	</head>
+	<body>
+Nama Barang : <BR><input type='text' onkeyup="autoComplete();" id='inputan'>
+<div id='hasil'></div> <!-- menampilkan hasil search -->
+	</body>
+</html>
